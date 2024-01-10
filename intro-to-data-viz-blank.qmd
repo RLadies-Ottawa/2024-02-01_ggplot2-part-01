@@ -1,0 +1,184 @@
+---
+title: "Introduction to Data Visualization (Part I)"
+author: "Reiko Okamoto"
+date: "2024-02-01"
+output: html_document
+---
+
+## ❓ Workshop information
+
+-   Code will be made available on GitHub
+
+-   This workshop was originally developed for the [NRC Women in Science and Innovation Coding Group](https://github.com/yoitsjenna/nRc-WiSI)
+
+-   📣 indicates instructions and 💡 indicates tips.
+
+## 📆 Upcoming schedule
+
+-   **Introduction to Data Visualization (Part II)** - Thursday, February 22 at 12:00-13:00 EST
+
+## ⏪ What did we discuss last time?
+
+-   R is a language for statistical computing and graphics.
+
+-   RStudio is a popular IDE for R.
+
+-   GitHub is a platform allowing people to store and manage their code.
+
+-   Packages contain code, documentation, and sample data in a standardized format that can be installed by users.
+
+-   Tidyverse is a collection of popular packages designed for data science.
+
+![](https://bookdown.org/michela_cameletti/notescrashcourser/images/4_tidyverse-packages.png){width="500"}
+
+## 🍽️ Today's menu
+
+-   Introduction to ggplot2 (1 min)
+
+-   Exploring the sample data (3 min)
+
+-   Histogram (5 min)
+
+-   Scatter plot (15 min)
+
+-   Line plot (15 min)
+
+-   Bar plot (10 min)
+
+## 🎨 Introduction to ggplot2 (1 min)
+
+> ggplot2 is a system for declaratively creating graphics, based on [The Grammar of Graphics](https://www.amazon.com/Grammar-Graphics-Statistics-Computing/dp/0387245448/ref=as_li_ss_tl). You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
+
+--- [Create Elegant Data Visualisations Using the Grammar of Graphics • ggplot2](https://ggplot2.tidyverse.org/)
+
+📣 Load the packages we'll be using:
+
+```{r load-package}
+
+```
+
+💡 You only need to install a package once, but you need to reload it every time you start a new session.
+
+## 🔍 Exploring the sample data (3 min)
+
+![](https://www.leparisien.fr/resizer/qrgtq2C8gkiP--dP3TChVRRPCbI=/932x582/cloudfront-eu-central-1.images.arcpublishing.com/leparisien/ZTKEM4AQQRF4ZBJSHFI6ACYDFA.jpg){width="500"}
+
+-   Data originally comes from SNCF (Société nationale des chemins de fer français), France's national state-owned railway company.
+
+-   We'll be using a modified version based on a CSV file from this [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-02-26).
+
+📣 Read the data:
+
+```{r import-data}
+
+```
+
+💡 readr is also part of the tidyverse; it provides a fast and user-friendly way to read rectangular text data. Rectangular data is a collection of variables (in columns) and observations (in rows).
+
+📣 Read the data dictionary to explore the type and description of each variable:
+
+| Variable                  | Type      | Description                           |
+|-----------------------|------------------|-------------------------------|
+| `year`                    | double    | Year of observation                   |
+| `month`                   | double    | Month of observation                  |
+| `service`                 | character | Type of train service                 |
+| `departure_station`       | character | Departure station name                |
+| `arrival_station`         | character | Arrival station name                  |
+| `journey_time_avg`        | double    | Average journey time (min)            |
+| `total_num_trips`         | double    | Total number of trains in time period |
+| `avg_delay_all_departing` | double    | Average departure delay (min)         |
+| `avg_delay_all_arriving`  | double    | Average arrival delay (min)           |
+| `num_late_at_departure`   | double    | Number of trains departing late       |
+| `num_arriving_late`       | double    | Number of trains arriving late        |
+
+```{r inspect-data}
+
+```
+
+-   Each row summarizes information on trips from one station to another for a given month and year.
+
+    -   First row captures information on trips from **AIX EN PROVENCE** (Aix-en-Provence) to **PARIS LYON** (Paris-Gare-de-Lyon) for the month of **JANUARY 2015**.
+
+    -   Last row captures information on trips from **ZURICH** to **PARIS LYON** for the month of **NOVEMBER 2018**.
+
+## 📈 Histogram (5 min)
+
+📣 Create a histogram to visualize the distribution of average journey time (numeric):
+
+```{r histogram}
+
+```
+
+-   We can see that the distribution of average journey time is right-skewed.
+
+💡 Creating a plot is like building a layered cake: all plots begin with a call to `ggplot()`, supplying default data and aesthetic mappings via `aes()`. You then create layers using a `geom_*` function, adding components with `+`.
+
+## 📈 Scatter plot (15 min)
+
+📣 Create a scatter plot to visualize the relationship between average journey time (numeric) and average arrival delay (numeric):
+
+```{r scatter-plot}
+
+```
+
+-   It looks as though the variance of delay increases as the average journey time increases. For journeys that average \<1 hour, arrival delays seem to be \<10 minutes. Meanwhile, for journeys that average 5 hours, arrival delays seem to be \<30 minutes.
+
+📣 Change the look and feel of the points:
+
+```{r scatter-plot-aes}
+
+```
+
+📣 Add title and change axis labels:
+
+```{r change-labels}
+
+```
+
+## 📈 Line plot (15 min)
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Ch%C3%A2teau_et_Tour_Tanguy.jpg/1024px-Ch%C3%A2teau_et_Tour_Tanguy.jpg){width="443"}
+
+-   Brest is a port city in Brittany, in northwestern France.
+
+📣 Create a line plot to show how the monthly number of trips from Paris to Brest fluctuates throughout the year:
+
+```{r line-plot}
+
+```
+
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate throughout the year:
+
+```{r multi-line-plot}
+
+```
+
+-   *Why does Rennes have the most frequent service?*
+
+    -   Trains departing from Paris often separate in Rennes (first part going to Brest and the latter going to Quimper). *Open up Google Maps!*
+
+    -   \# of trains to Rennes \~ \# of trains to Brest + \# of trains to Quimper
+
+💡 Use [`scale_*_continuous()`](https://ggplot2.tidyverse.org/reference/scale_continuous.html) to position scales for continuous data, [`scale_*_discrete()`](https://ggplot2.tidyverse.org/reference/scale_discrete.html) to position scales for discrete data, and [`scale_*_date()`](https://ggplot2.tidyverse.org/reference/scale_date.html) to position scales for date data.
+
+## 📈 Bar plot (10 min)
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Gare_Du_Nord_Interior%2C_Paris%2C_France_-_Diliff_%28cropped%29.jpg/1280px-Gare_Du_Nord_Interior%2C_Paris%2C_France_-_Diliff_%28cropped%29.jpg){width="517"}
+
+-   Gare du Nord, officially Paris-Nord, is the busiest railway station in Europe by total passenger numbers.
+
+📣 Create a bar plot to show the number of departures from Paris-Nord in 2015, by destination.
+
+```{r bar-plot}
+
+```
+
+📣 Create a grouped bar plot to compare the number of departures from Paris-Nord in 2015 and 2016, by destination.
+
+```{r multi-bar-plot}
+
+```
+
+## References
+
+-   [Function reference • ggplot2 (tidyverse.org)](https://ggplot2.tidyverse.org/reference/)
